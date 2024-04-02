@@ -270,7 +270,6 @@ async def refill_inl(texts):
     keyboard = InlineKeyboardMarkup()
     kb = []
     s = await db.get_payments()
-    yoomoney = s['pay_yoomoney']
     crystal = s['pay_crystal']
     lolz = s['pay_lolz']
     crypto = s['pay_crypto']
@@ -278,8 +277,7 @@ async def refill_inl(texts):
     aaio = s['pay_aaio']
 
 
-    if yoomoney == "True":
-        kb.append(InlineKeyboardButton(texts.yoomoney_text, callback_data="refill:yoomoney"))
+
     if lolz == "True":
         kb.append(InlineKeyboardButton(texts.lzt_text, callback_data="refill:lolz"))
     if crystal == "True":

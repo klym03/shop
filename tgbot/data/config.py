@@ -35,9 +35,6 @@ lolz_nick = read_config['settings']['lolz_nick'].strip().replace(" ", "") # ло
 
 
 
-# ЮMoney
-yoomoney_token = read_config['settings']['yoomoney_token'].strip().replace(" ", "") # юмани токен
-yoomoney_number = read_config['settings']['yoomoney_number'].strip().replace(" ", "") # юмани номер
 
 
 # Каналы

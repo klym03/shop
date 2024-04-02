@@ -5,7 +5,6 @@ from tgbot.data.config import db
 from tgbot.data.config import lang_ru as texts
 from tgbot.services.crystal import CrystalPay
 from tgbot.services.lolz import Lolz
-from tgbot.services.yoomoney_api import YooMoney
 from tgbot.services.payok import PayOk
 from tgbot.services.crypto_bot import CryptoBot
 from tgbot.services.aaio import Aaio
@@ -25,7 +24,6 @@ try:
         shop_id=config.payok_shop_id
     )
     crypto = CryptoBot(config.crypto_bot_token)
-    yoo = YooMoney(config.yoomoney_token, config.yoomoney_number)
 except:
     pass
 
@@ -55,12 +53,7 @@ async def payments_info(call: CallbackQuery, state: FSMContext):
 """
         return msg
 
-    if way == "yoomoney":
-        ways = texts.yoomoney_text
-        status = s['pay_yoomoney']
-
-        await call.message.edit_text(pay_info(ways, status), reply_markup=payments_settings_info(way, status))
-    elif way == "lzt":
+    if way == "lzt":
         ways = texts.lzt_text
         status = s['pay_lolz']
 
@@ -105,19 +98,7 @@ async def off_payments(call: CallbackQuery):
     """
         return msg
 
-    if way == "yoomoney":
-        ways = texts.yoomoney_text
-
-        if action == "off":
-            await db.update_payments(pay_yoomoney="False")
-        else:
-            await db.update_payments(pay_yoomoney="True")
-
-        s = await db.get_payments()
-        status = s['pay_yoomoney']
-
-        await call.message.edit_text(pay_info(ways, status), reply_markup=payments_settings_info(way, status))
-    elif way == "lzt":
+    if way == "lzt":
         ways = texts.lzt_text
 
         if action == "off":
@@ -184,13 +165,7 @@ async def payments_balance_call(call: CallbackQuery, state: FSMContext):
     await state.finish()
     way = call.data.split(":")[1]
 
-    if way == "yoomoney":
-        ways = texts.yoomoney_text
-
-        balance = yoo.get_balance()
-
-        await call.message.edit_text(f"{ways} \n\n<code>{balance} RUB</code>", reply_markup=payments_back())
-    elif way == "crystalPay":
+    if way == "crystalPay":
         ways = texts.crystalPay_text
 
         balance = await crystal.get_balance()
@@ -238,10 +213,6 @@ async def payments_info_open(call: CallbackQuery, state: FSMContext):
 
         await call.message.edit_text(f"{ways} \n\nЛогин кассы: <code>{config.crystal_Cassa}</code> \nСекретный токен 1: <code>{config.crystal_Token}</code>", reply_markup=payments_back())
 
-    elif way == "yoomoney":
-        ways = texts.yoomoney_text
-
-        await call.message.edit_text(f"{ways} \n\nТокен: <code>{config.yoomoney_token}</code> \nНомер: <code>{config.yoomoney_number}</code>", reply_markup=payments_back())
     elif way == "lzt":
         ways = texts.lzt_text
 

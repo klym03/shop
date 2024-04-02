@@ -4,7 +4,6 @@ from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
 from tgbot.services.crystal import CrystalPay
 from tgbot.services.lolz import Lolz
-from tgbot.services.yoomoney_api import YooMoney
 from tgbot.services.crypto_bot import CryptoBot
 from tgbot.services.payok import PayOk
 from tgbot.services.aaio import Aaio
@@ -32,7 +31,6 @@ try:
     )
     crystal = CrystalPay(config.crystal_Cassa, config.crystal_Token)
     lzt = Lolz(access_token=config.lolz_token)
-    yoo = YooMoney(token=config.yoomoney_token, number=config.yoomoney_number)
     crypto = CryptoBot(api_token=config.crypto_bot_token)
 except:
     pass
@@ -221,12 +219,6 @@ async def refill_pay(message: Message, state: FSMContext):
                 pay_amount = math.ceil(float(pay_amount))
                 link = lzt.get_link(amount=float(pay_amount), comment=comment)
                 id = comment
-            elif way == "yoomoney":
-                way = "ЮMoney"
-                order = random.randint(1111111, 9999999)
-                form = yoo.create_yoomoney_link(amount=pay_amount, comment=order)
-                link = form['link']
-                id = form['comment']
             elif way == "crypto_bot":
                 way = "CryptoBot"
 
@@ -297,13 +289,6 @@ async def check_refill(call: CallbackQuery, state: FSMContext):
                 await call.answer(texts.refill_check_no, True)
             else:
                 await call.answer(status, True)
-    elif way == "ЮMoney":
-        status = yoo.check_yoomoney_payment(comment=id)
-        refill = await db.get_refill(receipt=id)
-        if status and not refill:
-            await success_refill(call, way, amount, id, call.from_user.id, pay_amount1)
-        else:
-            await call.answer(texts.refill_check_no, True)
     elif way == "CryptoBot":
         status = await crypto.check_bill(bill_id=id)
         refill = await db.get_refill(receipt=id)

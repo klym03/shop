@@ -501,7 +501,6 @@ def payments_settings():
     keyboard = InlineKeyboardMarkup()
     kb = []
 
-    kb.append(InlineKeyboardButton(texts.yoomoney_text, callback_data="payments:yoomoney"))
     kb.append(InlineKeyboardButton(texts.lzt_text, callback_data="payments:lzt"))
     kb.append(InlineKeyboardButton(texts.crystalPay_text, callback_data="payments:crystalPay"))
     kb.append(InlineKeyboardButton(texts.cryptoBot_text, callback_data="payments:cryptoBot"))
