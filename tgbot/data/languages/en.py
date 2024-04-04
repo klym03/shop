@@ -34,7 +34,8 @@ class Texts:
 
     # Стартовый текст
     start_text = """
-Welcome {user_name}! Thank you for using our Store
+Welcome {user_name}! 
+Thank you for using our store
 Main menu:
     """
 
